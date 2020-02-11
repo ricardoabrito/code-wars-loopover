@@ -1,6 +1,9 @@
 package com.codewars.kata;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 class Board {
 
@@ -9,10 +12,35 @@ class Board {
 	private final int cols;
 	private final int rows;
 
+	private final int lastColIndex;
+	private final int lastRowIndex;
+
+	private List<Point> points;
+
 	private Board(char[][] grid) {
+
 		this.grid = grid;
 		this.cols = grid[0].length;
 		this.rows = grid.length;
+
+		this.lastColIndex = cols - 1;
+		this.lastRowIndex = rows - 1;
+
+		this.initPoints();
+	}
+
+	private void initPoints() {
+		List<Point> points = new ArrayList<>(this.cols * this.rows);
+		for(int i = 0; i < rows; i++) {
+			for(int j = 0; j < cols; j++) {
+				points.add(Point.of(i, j, this.grid[i][j], isOnCorner(i, j)));
+			}
+		}
+		this.points = points;
+	}
+
+	private boolean isOnCorner(int row, int col) {
+		return row >= this.lastRowIndex - 1 && col >= this.lastColIndex - 1;
 	}
 
 	static Board of(char[][] grid) {
@@ -29,6 +57,19 @@ class Board {
 		this.grid = newGrid;
 		return this;
 	}
+
+	Stream<Point> points() {
+		return this.points.stream();
+	}
+
+	Stream<Point> innerPoints() {
+		return points().filter(p -> p.notOnColumn(lastColIndex) && p.notOnRow(lastRowIndex));
+	}
+
+	Stream<Point> outerPoints() {
+		return points().filter(p -> (p.onColumn(lastColIndex) || p.onRow(lastRowIndex)) && p.notOnCorner());
+	}
+
 
 	private char newChar(Move move, int row, int column) {
 		if (move.isHorizontal()) {
@@ -89,4 +130,5 @@ class Board {
 			System.out.println(c);
 		});
 	}
+
 }

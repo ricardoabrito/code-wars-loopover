@@ -11,9 +11,8 @@ public class Solver {
 
 	public List<String> solve(Board mixedUp, Board solved) {
 		if (mixedUp.equals(solved)) { return moves; }
-
-		//Do Stuff Here to Work!
-
+		solved.innerPoints().forEach(p -> System.out.println(p.getValue()));
+//		solved.outerPoints().forEach(p -> System.out.println(p.getValue()));
 		return  moves;
 	}
 }
