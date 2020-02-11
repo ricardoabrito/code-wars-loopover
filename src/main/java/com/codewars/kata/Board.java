@@ -54,8 +54,7 @@ class Board {
 				newGrid[i][j] = newChar(move, i, j);
 			}
 		}
-		this.grid = newGrid;
-		return this;
+		return Board.of(newGrid);
 	}
 
 	Stream<Point> points() {
@@ -73,9 +72,9 @@ class Board {
 
 	private char newChar(Move move, int row, int column) {
 		if (move.isHorizontal()) {
-			row = move.isIndex(column) ? shiftRow(move, row) : row;
-		} else {
 			column = move.isIndex(row) ? shiftColumn(move, column) : column;
+		} else {
+			row = move.isIndex(column) ? shiftRow(move, row) : row;
 		}
 		return this.grid[row][column];
 	}
@@ -93,7 +92,7 @@ class Board {
 	}
 
 	private int negativeShift(int index, int max) {
-		int shifted =  index - 1;
+		int shifted = index - 1;
 		return shifted < 0 ? max - 1 : shifted;
 	}
 	private int positiveShift(int index, int max) {
@@ -125,10 +124,17 @@ class Board {
 		return true;
 	}
 
-	void print() {
+	/**
+	 * For Debugging Purposes
+	 */
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
 		Arrays.stream(grid).forEach(c -> {
-			System.out.println(c);
+			stringBuilder.append(c);
+			stringBuilder.append("\n");
 		});
+		return stringBuilder.toString();
 	}
 
 }

@@ -3,8 +3,6 @@ package com.codewars.kata;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codewars.kata.Move.UP;
-
 public class Solver {
 
 	List<String> moves = new ArrayList<>();
