@@ -16,6 +16,7 @@ class Board {
 	private final int lastRowIndex;
 
 	private List<Point> points;
+	private boolean update = true;
 
 	private Board(char[][] grid) {
 
@@ -25,8 +26,6 @@ class Board {
 
 		this.lastColIndex = cols - 1;
 		this.lastRowIndex = rows - 1;
-
-		this.initPoints();
 	}
 
 	private void initPoints() {
@@ -37,6 +36,7 @@ class Board {
 			}
 		}
 		this.points = points;
+		this.update = false;
 	}
 
 	private boolean isOnCorner(int row, int col) {
@@ -54,10 +54,13 @@ class Board {
 				newGrid[i][j] = newChar(move, i, j);
 			}
 		}
-		return Board.of(newGrid);
+		this.grid = newGrid;
+		this.update = true;
+		return this;
 	}
 
 	Stream<Point> points() {
+		if (update) { this.innerPoints(); }
 		return this.points.stream();
 	}
 
@@ -67,6 +70,10 @@ class Board {
 
 	Stream<Point> outerPoints() {
 		return points().filter(p -> (p.onColumn(lastColIndex) || p.onRow(lastRowIndex)) && p.notOnCorner());
+	}
+
+	Point find(Point point) {
+		return this.points().filter(p -> p.equals(point)).findFirst().get();
 	}
 
 

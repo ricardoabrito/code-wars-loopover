@@ -9,8 +9,12 @@ public class Solver {
 
 	public List<String> solve(Board mixedUp, Board solved) {
 		if (mixedUp.equals(solved)) { return moves; }
-		solved.innerPoints().forEach(p -> System.out.println(p.getValue()));
-//		solved.outerPoints().forEach(p -> System.out.println(p.getValue()));
+		solved.innerPoints().forEach(p -> solveInnerSquare(mixedUp, p));
 		return  moves;
 	}
+
+	private Board solveInnerSquare(Board board, Point point){
+		return null;
+	}
+
 }
